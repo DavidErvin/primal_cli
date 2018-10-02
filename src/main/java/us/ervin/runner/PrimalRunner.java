@@ -13,32 +13,48 @@ import us.ervin.impl.PrimeNumberGeneratorImpl;
 public class PrimalRunner {
 
 	public static void main(String[] args) {
-		// parse out command line args
-		if (args.length != 2) {
-			printHelp();
-			System.exit(1);
-		}
-		int rangeStart = parseInt(args[0]);
-		int rangeEnd = parseInt(args[1]);
-		PrimeNumberGenerator generator = new PrimeNumberGeneratorImpl();
-		List<Integer> primes = generator.generate(rangeStart, rangeEnd);
-		System.out.println(primes);
+		new PrimalRunner(i -> System.exit(i)).printRange(args);
+	}
+
+	private Exiter exiter;
+
+	public PrimalRunner(Exiter exiter) {
+		this.exiter = exiter;
 	}
 	
+
+	public void printRange(String[] args) {
+		// parse out command line args
+		if (args.length == 2) {
+			Integer rangeStart = parseInt(args[0]);
+			Integer rangeEnd = parseInt(args[1]);
+			if (rangeStart != null && rangeEnd != null) {
+				PrimeNumberGenerator generator = new PrimeNumberGeneratorImpl();
+				List<Integer> primes = generator.generate(rangeStart, rangeEnd);
+				System.out.println(primes);
+				exiter.exit(0);
+			} else {
+				exiter.exit(1);
+			}
+		} else {
+			printHelp();
+			exiter.exit(1);
+		}
+	}
 	
-	private static int parseInt(String val) {
-		int i = 0;
+
+	private Integer parseInt(String val) {
+		Integer i = null;
 		try {
 			i = Integer.valueOf(val);
 		} catch (Exception ex) {
 			System.err.println("Error parsing value '" + val + "' as an integer: " + ex.getMessage());
 			printHelp();
-			System.exit(1);
+			exiter.exit(1);
 		}
 		return i;
 	}
-	
-	
+
 	private static void printHelp() {
 		System.out.println("Usage: primal_cli-1.0.0.jar [rangeStart] [rangeEnd]\n");
 		System.out.println("rangeStart and rangeEnd must be positive integers.\n");
