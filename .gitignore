@@ -1,0 +1,4 @@
+# Ignore emacs backup stuff
+*~
+# and maven's target dir
+target/
