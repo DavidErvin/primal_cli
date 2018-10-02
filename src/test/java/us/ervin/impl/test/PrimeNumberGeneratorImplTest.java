@@ -1,6 +1,6 @@
 package us.ervin.impl.test;
 
-import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -15,6 +15,13 @@ import us.ervin.PrimeNumberGenerator;
 import us.ervin.impl.PrimeNumberGeneratorImpl;
 
 public class PrimeNumberGeneratorImplTest {
+	
+	private static final List<Integer> FIRST_26_PRIMES = Arrays.asList(
+			new Integer[] {
+					2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 
+					37, 41, 43, 47, 53, 59, 61, 67, 71, 73,
+					79, 83, 89, 97, 101
+			});
 
 	private static PrimeNumberGenerator generator;
 	
@@ -25,6 +32,13 @@ public class PrimeNumberGeneratorImplTest {
 	
 	
 	// tests for the isPrime method
+	@Test
+	public void testNegative() {
+		boolean prime = generator.isPrime(-5);
+		assertFalse("-5 should not have been prime", prime);
+	}
+	
+	
 	@Test
 	public void testZero() {
 		boolean prime = generator.isPrime(0);
@@ -55,15 +69,49 @@ public class PrimeNumberGeneratorImplTest {
 	
 	@Test
 	public void testFirstTwentySixPrimes() {
-		List<Integer> knownPrimes = Arrays.asList(
-			new Integer[] {
-				2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 
-				37, 41, 43, 47, 53, 59, 61, 67, 71, 73,
-				79, 83, 89, 97, 101
-		});
-		for (int i = 0; i < knownPrimes.get(knownPrimes.size() - 1); i++) {
+		for (int i = 0; i < FIRST_26_PRIMES.get(FIRST_26_PRIMES.size() - 1); i++) {
 			boolean prime = generator.isPrime(i);
-			assertThat("Incorrect value for " + i, prime, equalTo(knownPrimes.contains(i)));
+			assertThat("Incorrect value for " + i, prime, equalTo(FIRST_26_PRIMES.contains(i)));
 		}
+	}
+	
+	
+	// tests for the generate method
+	@Test
+	public void testGenerateZeroSizeRangeOfPrimes() {
+		List<Integer> primes = generator.generate(0, 0);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(0));
+		
+		// also check a negative number range
+		primes = generator.generate(-10, -5);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(0));
+		
+		// and that we can flip the order of those numbers
+		primes = generator.generate(-5, -10);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(0));
+		
+		// and that some huge but non-prime number range also is zero size
+		primes = generator.generate(200, 210);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(0));
+	}
+	
+	
+	@Test
+	public void testGenerateFirstTwentySixPrimes() {
+		// we know 0-101 contains 26 primes
+		List<Integer> primes = generator.generate(0, 101);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(26));
+		assertTrue("Did not find all expected primes", primes.containsAll(FIRST_26_PRIMES));
+		
+		// and again in reverse
+		primes = generator.generate(101, 0);
+		assertThat(primes, is(notNullValue()));
+		assertThat(primes.size(), is(26));
+		assertTrue("Did not find all expected primes", primes.containsAll(FIRST_26_PRIMES));
 	}
 }

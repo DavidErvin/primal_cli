@@ -1,6 +1,9 @@
 package us.ervin.impl;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import us.ervin.PrimeNumberGenerator;
 
@@ -8,8 +11,15 @@ public class PrimeNumberGeneratorImpl implements PrimeNumberGenerator {
 
 	@Override
 	public List<Integer> generate(int startingValue, int endingValue) {
-		// TODO Auto-generated method stub
-		return null;
+		List<Integer> primes = new ArrayList<Integer>();
+		// determine low and high values so we can walk through the range
+		int low = Math.min(startingValue, endingValue);
+		int high = Math.max(startingValue, endingValue);
+		// make a stream of all numbers `low` to `high` inclusive
+		// keeping only the prime integers
+		primes = IntStream.rangeClosed(low, high)
+			.filter(i -> isPrime(i)).boxed().collect(Collectors.toList());
+		return primes;
 	}
 	
 
