@@ -2,3 +2,5 @@
 *~
 # and maven's target dir
 target/
+# and jacoco's binary analysis file
+jacoco.exec
