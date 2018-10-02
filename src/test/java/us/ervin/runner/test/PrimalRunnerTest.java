@@ -60,4 +60,11 @@ public class PrimalRunnerTest {
 		runner.printRange(new String[] {"10", "not an integer"});
 		assertThat(capturedExitCode.get(), is(1));
 	}
+	
+	
+	@Test
+	public void testCli7900to7920() {
+		runner.printRange(new String[] {"7900", "7920"});
+		assertThat(capturedExitCode.get(), is(0));
+	}
 }
