@@ -16,11 +16,11 @@ public class PrimeNumberGeneratorImpl implements PrimeNumberGenerator {
 	@Override
 	public boolean isPrime(int value) {
 		boolean prime = false;
-		if (value <= 0) {
-			// negative numbers and 0 are not prime (can't divide 0 by itself...)
+		if (value <= 1) {
+			// negative numbers, 0, and 1 are not prime (can't divide 0 by itself...)
 			prime = false;
-		} else if (value == 1 || value == 2 || value == 3) {
-			// special case small numbers
+		} else if (value == 2) {
+			// special case for exactly 2
 			prime = true;
 		} else if (value % 2 == 0) {
 			// even numbers != 2 are trivial to eliminate
@@ -32,12 +32,17 @@ public class PrimeNumberGeneratorImpl implements PrimeNumberGenerator {
 			 * value = a * b.  if both a and b are greater than 
 			 * sqrt (value), the result must be greater than value.
 			 */
+			// assume the number IS prime until we prove otherwise
+			prime = true;
 			double max = Math.floor(Math.sqrt(value));
-			for (int i = 3; i <= max && !prime; i++) {
+			for (int i = 2; i <= max && prime; i++) {
 				double check = value / (double) i;
 				// see if the value of `check` is an integer
 				double rounded = Math.floor(check);
-				prime = check == rounded;
+				if (check == rounded) {
+					// found a divisor
+					prime = false;
+				}
 			}
 		}
 		return prime;

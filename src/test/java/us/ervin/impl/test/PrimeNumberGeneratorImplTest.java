@@ -1,7 +1,12 @@
 package us.ervin.impl.test;
 
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.*;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -30,7 +35,7 @@ public class PrimeNumberGeneratorImplTest {
 	@Test
 	public void testOne() {
 		boolean prime = generator.isPrime(1);
-		assertTrue("1 should have been prime", prime);
+		assertFalse("1 should not have been prime", prime);
 	}
 	
 	
@@ -45,5 +50,20 @@ public class PrimeNumberGeneratorImplTest {
 	public void testThree() {
 		boolean prime = generator.isPrime(3);
 		assertTrue("3 should have been prime", prime);
+	}
+	
+	
+	@Test
+	public void testFirstTwentySixPrimes() {
+		List<Integer> knownPrimes = Arrays.asList(
+			new Integer[] {
+				2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 
+				37, 41, 43, 47, 53, 59, 61, 67, 71, 73,
+				79, 83, 89, 97, 101
+		});
+		for (int i = 0; i < knownPrimes.get(knownPrimes.size() - 1); i++) {
+			boolean prime = generator.isPrime(i);
+			assertThat("Incorrect value for " + i, prime, equalTo(knownPrimes.contains(i)));
+		}
 	}
 }
