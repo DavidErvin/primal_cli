@@ -114,4 +114,15 @@ public class PrimeNumberGeneratorImplTest {
 		assertThat(primes.size(), is(26));
 		assertTrue("Did not find all expected primes", primes.containsAll(FIRST_26_PRIMES));
 	}
+	
+	
+	@Test
+	public void testRange7900to7920() {
+		// Ensure that you run a test against the range 7900 and 7920 (valid primes are 7901, 7907, 7919).
+		List<Integer> expected = Arrays.asList(7901, 7907, 7919);
+		List<Integer> found = generator.generate(7900, 7920);
+		assertThat(found, is(notNullValue()));
+		assertThat(found.size(), is(equalTo(expected.size())));
+		assertTrue(found.containsAll(expected));
+	}
 }
