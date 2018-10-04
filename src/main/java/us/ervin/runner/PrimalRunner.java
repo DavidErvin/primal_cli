@@ -13,13 +13,10 @@ import us.ervin.impl.PrimeNumberGeneratorImpl;
 public class PrimalRunner {
 
 	public static void main(String[] args) {
-		new PrimalRunner(i -> System.exit(i)).printRange(args);
+		new PrimalRunner().printRange(args);
 	}
 
-	private Exiter exiter;
-
-	public PrimalRunner(Exiter exiter) {
-		this.exiter = exiter;
+	public PrimalRunner() {
 	}
 	
 
@@ -32,13 +29,11 @@ public class PrimalRunner {
 				PrimeNumberGenerator generator = new PrimeNumberGeneratorImpl();
 				List<Integer> primes = generator.generate(rangeStart, rangeEnd);
 				System.out.println(primes);
-				exiter.exit(0);
 			} else {
-				exiter.exit(1);
+				printHelp();
 			}
 		} else {
 			printHelp();
-			exiter.exit(1);
 		}
 	}
 	
@@ -49,8 +44,6 @@ public class PrimalRunner {
 			i = Integer.valueOf(val);
 		} catch (Exception ex) {
 			System.err.println("Error parsing value '" + val + "' as an integer: " + ex.getMessage());
-			printHelp();
-			exiter.exit(1);
 		}
 		return i;
 	}
