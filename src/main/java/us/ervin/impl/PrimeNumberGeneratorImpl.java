@@ -46,11 +46,7 @@ public class PrimeNumberGeneratorImpl implements PrimeNumberGenerator {
 			prime = true;
 			double max = Math.floor(Math.sqrt(value));
 			for (int i = 2; i <= max && prime; i++) {
-				double check = value / (double) i;
-				// see if the value of `check` is an integer
-				double rounded = Math.floor(check);
-				if (check == rounded) {
-					// found a divisor
+				if (value % i == 0) {
 					prime = false;
 				}
 			}
